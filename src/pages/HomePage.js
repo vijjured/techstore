@@ -1,14 +1,18 @@
 import React from "react";
-import { ProductConsumer } from "../context/context";
-
+import Hero from "../components/Hero";
+import { Link } from "react-router-dom";
+import Services from "../components/HomePage/Services";
+import Featured from "../components/HomePage/Featured";
 export default function HomePage() {
   return (
     <React.Fragment>
-      <ProductConsumer>
-        {(value) => {
-          return <h1>test</h1>;
-        }}
-      </ProductConsumer>
+      <Hero title="awesome products" max="true">
+        <Link to="/products" className="main-link" style={{ margin: "2rem" }}>
+          our products
+        </Link>
+      </Hero>
+      <Services />
+      <Featured />
     </React.Fragment>
   );
 }

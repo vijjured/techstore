@@ -1,9 +1,9 @@
 import React from "react";
-
+import CartItems from "../components/CartPageComponent/CartItems";
 export default function CartPage() {
   return (
     <React.Fragment>
-      <h1>Hello From Cart Page</h1>
+      <CartItems />
     </React.Fragment>
   );
 }

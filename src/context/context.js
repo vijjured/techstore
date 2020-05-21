@@ -26,6 +26,7 @@ class ProductProvider extends Component {
     minPrice: 0,
     filterPrice: 0,
     shipping: false,
+    functionCall: 0,
   };
 
   componentDidMount() {
@@ -249,9 +250,37 @@ class ProductProvider extends Component {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = event.target.name;
-    this.setState({ [name]: value }, () => {
-      this.filterProducts();
+    this.setState({ [name]: value });
+  };
+
+  buildFilterQuery = () => {
+    const { searchTerm, companyType, filterPrice, shipping } = this.state;
+    const params = new URLSearchParams({
+      searchTerm,
+      companyType,
+      filterPrice,
+      shipping,
     });
+    let url = `${window.location.origin}/products?${params.toString()}`;
+    window.history.pushState({ path: url }, "", url);
+    this.filterProducts();
+  };
+
+  handleFilterQuery = (obj) => {
+    const { searchterm, filterprice, shipping, companytype } = obj;
+    if (searchterm !== this.state.searchTerm)
+      this.setState(
+        {
+          searchTerm: searchterm,
+          filterPrice: filterprice,
+          shipping: JSON.parse(shipping),
+          companyType: companytype,
+          functionCall: 1,
+        },
+        () => {
+          this.filterProducts();
+        }
+      );
   };
   render() {
     return (
@@ -267,6 +296,8 @@ class ProductProvider extends Component {
           deleteItemFromCart: this.deleteItemFromCart,
           clearCart: this.clearCart,
           handleChange: this.handleChange,
+          buildFilterQuery: this.buildFilterQuery,
+          handleFilterQuery: this.handleFilterQuery,
         }}
       >
         {this.props.children}

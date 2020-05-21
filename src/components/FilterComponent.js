@@ -13,8 +13,8 @@ export default function FilterComponent() {
           shipping,
           storeProducts,
           handleChange,
+          buildFilterQuery,
         } = value;
-
         const companyTypes = storeProducts.map((product) => product.company);
         const filteredCompanytypes = companyTypes.reduce((acc, item) => {
           if (!acc.includes(item)) {
@@ -43,6 +43,11 @@ export default function FilterComponent() {
                   value={searchTerm}
                   onChange={handleChange}
                   className="form-control"
+                  onKeyPress={(e) => {
+                    if (e.charCode === 13) {
+                      e.preventDefault();
+                    }
+                  }}
                 />
               </div>
               <div className="form-group">
@@ -73,18 +78,35 @@ export default function FilterComponent() {
                 />
               </div>
               <div className="form-group">
-                <div className="single-extra">
-                  <input
-                    type="checkbox"
-                    name="shipping"
-                    id="shipping"
-                    checked={shipping}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor="shipping">Free Shipping</label>
-                </div>
+                <label htmlFor="shipping">Free Shipping</label>
+                <input
+                  type="checkbox"
+                  name="shipping"
+                  id="shipping"
+                  checked={shipping}
+                  onChange={handleChange}
+                />
               </div>
             </form>
+            <button
+              type="button"
+              className="btn btn-outline-danger text-capitalize mb-4"
+              style={{ margin: "0.75rem" }}
+              onClick={() => {
+                const url = `${window.location.origin}/products`;
+                window.location.href = url;
+              }}
+            >
+              Clear Filters
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline-danger text-capitalize mb-4"
+              style={{ margin: "0.75rem" }}
+              onClick={buildFilterQuery}
+            >
+              Apply Filters
+            </button>
           </section>
         );
       }}

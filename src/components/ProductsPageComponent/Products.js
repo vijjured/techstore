@@ -2,6 +2,7 @@ import React from "react";
 import { ProductConsumer } from "../../context/context";
 import Title from "../AboutPageComponents/Title";
 import Product from "../Product";
+import FilterComponent from "../FilterComponent";
 export default function Products() {
   return (
     <ProductConsumer>
@@ -11,6 +12,7 @@ export default function Products() {
           <section className="py-5">
             <div className="container">
               <Title center title="our products" />
+              <FilterComponent />
               <div className="row py-5">
                 {filteredProducts.map((product) => {
                   return <Product key={product.key} product={product} />;

@@ -33,7 +33,7 @@ export default function CartList() {
                             />
                           </div>
                           <div className="col-10 mx-auto col-lg-2 pb-2">
-                            <span className="d-lg-none">price :</span>$
+                            <span className="d-lg-none">title :</span>$
                             {item.title}
                           </div>
                           <div className="col-10 mx-auto col-lg-2 pb-2">

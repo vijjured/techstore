@@ -20,6 +20,12 @@ class ProductProvider extends Component {
     featuredProducts: [],
     singleProduct: {},
     loading: false,
+    searchTerm: "",
+    companyType: "all",
+    maxPrice: 0,
+    minPrice: 0,
+    filterPrice: 0,
+    shipping: false,
   };
 
   componentDidMount() {
@@ -48,6 +54,8 @@ class ProductProvider extends Component {
       const product = { id, ...item.fields, image };
       return product;
     });
+    let maxPrice = Math.max(...storeProducts.map((item) => item.price));
+    let minPrice = Math.min(...storeProducts.map((item) => item.price));
 
     let featuredProducts = storeProducts.filter(
       (product) => product.featured === true
@@ -56,6 +64,9 @@ class ProductProvider extends Component {
     this.setState(
       {
         storeProducts,
+        maxPrice,
+        filterPrice: maxPrice,
+        minPrice,
         filteredProducts: storeProducts,
         featuredProducts,
         cart: this.getStorageCart(),
@@ -203,6 +214,45 @@ class ProductProvider extends Component {
       0
     );
   };
+
+  filterProducts = () => {
+    const {
+      searchTerm,
+      storeProducts,
+      companyType,
+      filterPrice,
+      shipping,
+    } = this.state;
+    let filteredProducts = storeProducts.filter((product) =>
+      product.title.includes(searchTerm)
+    );
+    if (companyType !== "all") {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.company === companyType
+      );
+    }
+
+    filteredProducts = filteredProducts.filter(
+      (product) => product.price <= filterPrice
+    );
+
+    if (shipping) {
+      filteredProducts = filteredProducts.filter((product) => {
+        return product.shipping === shipping;
+      });
+    }
+
+    this.setState({ filteredProducts });
+  };
+
+  handleChange = (event) => {
+    const target = event.target;
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    const name = event.target.name;
+    this.setState({ [name]: value }, () => {
+      this.filterProducts();
+    });
+  };
   render() {
     return (
       <ProductContext.Provider
@@ -216,6 +266,7 @@ class ProductProvider extends Component {
           setSingleProduct: this.setSingleProduct,
           deleteItemFromCart: this.deleteItemFromCart,
           clearCart: this.clearCart,
+          handleChange: this.handleChange,
         }}
       >
         {this.props.children}

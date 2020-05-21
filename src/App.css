@@ -55,3 +55,7 @@ body {
 .cartItemsList {
   list-style-type: none;
 }
+
+.product#title {
+  color: black;
+}
